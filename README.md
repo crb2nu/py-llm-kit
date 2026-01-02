@@ -1,4 +1,4 @@
-# py-llm-kit
+# flexinfer-llm-kit
 
 Reusable LLM client helpers and speculative decoding workflows for FlexInfer Python services.
 
@@ -9,6 +9,12 @@ Reusable LLM client helpers and speculative decoding workflows for FlexInfer Pyt
 - Speculative decode workflow (draft → verify → revise) via LangGraph
 
 ## Installation
+
+From PyPI:
+
+```bash
+pip install flexinfer-llm-kit
+```
 
 From GitLab:
 
@@ -56,8 +62,13 @@ MIT
 2. Tag and push:
 
 ```bash
-git tag -a v0.1.0 -m "Release v0.1.0"
-git push origin v0.1.0
+git tag -a v0.2.0 -m "Release v0.2.0"
+git push origin v0.2.0
 ```
 
 3. In GitLab CI for `libs/py-llm-kit`, run the manual `publish` job for that tag pipeline.
+
+## Publishing (Public PyPI)
+
+1. Set GitLab CI variables: `PYPI_API_TOKEN` and `PUBLISH_PUBLIC_PYPI=true`.
+2. Run the manual `publish:pypi` job for the tag pipeline.

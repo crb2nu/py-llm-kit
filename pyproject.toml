@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "py-llm-kit"
-version = "0.1.0"
+name = "flexinfer-llm-kit"
+version = "0.2.0"
 description = "Reusable LLM clients and speculative decode workflows for FlexInfer services"
 readme = "README.md"
 requires-python = ">=3.11"

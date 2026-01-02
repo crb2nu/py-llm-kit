@@ -1,4 +1,4 @@
-# Roadmap: py-llm-kit
+# Roadmap: flexinfer-llm-kit
 
 ## Vision
 
@@ -15,8 +15,8 @@ Provide a small, consistent LLM integration layer for FlexInfer Python services:
 ## Immediate Priorities
 
 - [ ] Add optional cloud fallback (OpenAI) parity with service configs
-- [ ] Add request/response logging hooks compatible with `py-observability`
-- [ ] Add retry hooks compatible with `py-resilience`
+- [ ] Add request/response logging hooks compatible with `flexinfer-observability`
+- [ ] Add retry hooks compatible with `flexinfer-resilience`
 
 ## Maintenance
 
