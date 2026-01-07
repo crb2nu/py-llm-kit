@@ -1,3 +1,5 @@
+![Banner](assets/banner.png)
+
 # flexinfer-llm-kit
 
 Reusable LLM client helpers and speculative decoding workflows for FlexInfer Python services.
