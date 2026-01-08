@@ -9,6 +9,9 @@ from langchain_openai import ChatOpenAI
 from openai import OpenAI
 
 from llm_kit.config import get_llm_settings
+from llm_kit.resilience.chat import ResilientChatModel
+from observability.tracing import instrument_llm
+from resilience import CircuitBreaker, CircuitBreakerConfig, Retry, RetryConfig
 
 
 @lru_cache
@@ -58,3 +61,15 @@ def get_agent_model(**kwargs: Any) -> ChatOpenAI:
         timeout=settings.request_timeout,
         **kwargs,
     )
+
+
+def get_resilient_model(
+    model: ChatOpenAI, name: str = "llm"
+) -> ResilientChatModel:
+    """Wrap a ChatOpenAI model with resilience and observability."""
+    breaker = CircuitBreaker(
+        name=name,
+        config=CircuitBreakerConfig(failure_threshold=5, recovery_timeout=30),
+    )
+    retry = Retry(config=RetryConfig(max_attempts=3))
+    return ResilientChatModel(model, circuit_breaker=breaker, retry=retry, name=name)

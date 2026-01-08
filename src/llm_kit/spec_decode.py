@@ -7,7 +7,7 @@ from typing import Literal, TypedDict
 from langgraph.graph import END, StateGraph
 from pydantic import BaseModel, Field
 
-from llm_kit.clients import get_agent_model, get_textgen_model
+from llm_kit.clients import get_agent_model, get_resilient_model, get_textgen_model
 
 
 class SpecDecodeState(TypedDict):
@@ -21,8 +21,8 @@ class SpecDecodeState(TypedDict):
 
 
 def create_spec_decode_graph(max_iterations: int = 2) -> StateGraph:
-    draft_model = get_textgen_model()
-    verify_model = get_agent_model()
+    draft_model = get_resilient_model(get_textgen_model(), name="draft_model")
+    verify_model = get_resilient_model(get_agent_model(), name="verify_model")
 
     def draft_node(state: SpecDecodeState) -> dict:
         system = (
