@@ -7,7 +7,7 @@ name = "flexinfer-llm-kit"
 version = "0.2.1"
 description = "Reusable LLM clients and speculative decode workflows for FlexInfer services"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.14"
 license = { text = "MIT" }
 authors = [
     { name = "Cody Blevins", email = "cody@flexinfer.ai" }
@@ -18,7 +18,7 @@ dependencies = [
     "langgraph>=0.2.0",
     "pydantic>=2.5.0",
     "flexinfer-observability @ git+https://gitlab.flexinfer.ai/libs/py-observability.git@d61a790a19fc7a600ba27384d20ad37fdb580d96",
-    "flexinfer-resilience @ git+https://gitlab.flexinfer.ai/libs/py-resilience.git@94b60e59373a7a69bc12dcf07ff7b20f4082676e",
+    "flexinfer-resilience @ git+https://gitlab.flexinfer.ai/libs/py-resilience.git@2f6e8d6014eb89a42a6a88c183e516d029f1fe3e",
 ]
 
 [project.optional-dependencies]
