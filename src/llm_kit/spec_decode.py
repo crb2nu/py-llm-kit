@@ -25,9 +25,7 @@ def create_spec_decode_graph(max_iterations: int = 2) -> StateGraph:
     verify_model = get_resilient_model(get_agent_model(), name="verify_model")
 
     def draft_node(state: SpecDecodeState) -> dict:
-        system = (
-            state.get("system_prompt") or "You are a helpful assistant. Be concise."
-        )
+        system = state.get("system_prompt") or "You are a helpful assistant. Be concise."
 
         if state.get("feedback"):
             messages = [
@@ -72,9 +70,7 @@ def create_spec_decode_graph(max_iterations: int = 2) -> StateGraph:
             },
             {
                 "role": "user",
-                "content": (
-                    f"Task: {state['task']}\n\nDraft Response:\n{state['draft']}"
-                ),
+                "content": (f"Task: {state['task']}\n\nDraft Response:\n{state['draft']}"),
             },
         ]
 

@@ -10,10 +10,9 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Optional
 
 
-def _env(name: str, default: Optional[str] = None) -> Optional[str]:
+def _env(name: str, default: str | None = None) -> str | None:
     value = os.getenv(name)
     if value is None:
         return default
@@ -64,7 +63,7 @@ class LLMSettings:
     agent_max_tokens: int
 
     cloud_fallback_enabled: bool
-    openai_api_key: Optional[str]
+    openai_api_key: str | None
     openai_model: str
 
     request_timeout: int
