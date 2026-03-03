@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from inspect import isawaitable
 from typing import Any
 
 from langchain_core.language_models import BaseChatModel
@@ -34,7 +35,20 @@ class ResilientChatModel:
         """Invoke the model with resilience."""
 
         async def call_model() -> Any:
-            return await self.model.ainvoke(input, **kwargs)
+            instance_ainvoke = getattr(getattr(self.model, "__dict__", {}), "get", lambda _k: None)(
+                "ainvoke"
+            )
+            supports_ainvoke = callable(instance_ainvoke) or callable(
+                getattr(type(self.model), "ainvoke", None)
+            )
+            result: Any
+            if supports_ainvoke:
+                result = self.model.ainvoke(input, **kwargs)
+            else:
+                result = self.model.invoke(input, **kwargs)
+            if isawaitable(result):
+                return await result
+            return result
 
         # Apply Retry
         if self.retry:

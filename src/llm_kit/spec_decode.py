@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from inspect import isawaitable
 from typing import Any, Literal, TypedDict
 
 from langgraph.graph import END, StateGraph
@@ -24,7 +25,23 @@ def create_spec_decode_graph(max_iterations: int = 2) -> Any:
     draft_model = get_resilient_model(get_textgen_model(), name="draft_model")
     verify_model = get_resilient_model(get_agent_model(), name="verify_model")
 
-    def draft_node(state: SpecDecodeState) -> dict:
+    async def _call_model(model: Any, messages: list[dict[str, str]]) -> Any:
+        # Test doubles may expose only sync `invoke`, while real models expose async call paths.
+        instance_ainvoke = getattr(getattr(model, "__dict__", {}), "get", lambda _k: None)(
+            "ainvoke"
+        )
+        supports_ainvoke = callable(instance_ainvoke) or callable(
+            getattr(type(model), "ainvoke", None)
+        )
+        if supports_ainvoke:
+            result = model.ainvoke(messages)
+        else:
+            result = model.invoke(messages)
+        if isawaitable(result):
+            return await result
+        return result
+
+    async def draft_node(state: SpecDecodeState) -> dict:
         system = state.get("system_prompt") or "You are a helpful assistant. Be concise."
 
         if state.get("feedback"):
@@ -46,7 +63,7 @@ def create_spec_decode_graph(max_iterations: int = 2) -> Any:
                 {"role": "user", "content": state["task"]},
             ]
 
-        response = draft_model.invoke(messages)
+        response = await _call_model(draft_model, messages)
         return {
             "draft": response.content,
             "iteration": state.get("iteration", 0) + 1,
@@ -60,7 +77,7 @@ def create_spec_decode_graph(max_iterations: int = 2) -> Any:
             description="If REVISE, provide concise feedback. If APPROVED, leave empty."
         )
 
-    def verify_node(state: SpecDecodeState) -> dict:
+    async def verify_node(state: SpecDecodeState) -> dict:
         messages = [
             {
                 "role": "system",
@@ -75,7 +92,7 @@ def create_spec_decode_graph(max_iterations: int = 2) -> Any:
         ]
 
         structured_llm = verify_model.with_structured_output(VerifyOutput)
-        response = structured_llm.invoke(messages)
+        response = await _call_model(structured_llm, messages)
 
         if response.status == "APPROVED":
             return {
