@@ -12,6 +12,8 @@ variables:
   image: python:3.12
   variables:
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.pip-cache"
+    PIP_INDEX_URL: "https://pypi.org/simple"
+    PIP_EXTRA_INDEX_URL: ""
   cache:
     key: "${CI_COMMIT_REF_SLUG}-python"
     paths:
