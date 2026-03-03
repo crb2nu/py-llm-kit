@@ -8,6 +8,22 @@ stages: [lint, test, publish]
 variables:
   PUBLISH_PUBLIC_PYPI: "false"
 
+.python-base:
+  image: python:3.12
+  variables:
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.pip-cache"
+  cache:
+    key: "${CI_COMMIT_REF_SLUG}-python"
+    paths:
+      - .pip-cache/
+      - .venv/
+  before_script:
+    - python -m venv .venv
+    - source .venv/bin/activate
+    - pip install --upgrade pip wheel
+    - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.flexinfer.ai/".insteadOf "https://gitlab.flexinfer.ai/"
+    - pip install -e ".[dev]"
+
 lint:
   extends: .python-lint
 
