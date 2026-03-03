@@ -70,12 +70,14 @@ class LLMSettings:
 
 
 def _load_settings() -> LLMSettings:
-    base_url = _env("LLM_BASE_URL", "http://litellm.ai.svc:8000/v1")
-    api_key = _env("LLM_API_KEY", "sk-local")
+    base_url = (
+        _env("LLM_BASE_URL", "http://litellm.ai.svc:8000/v1") or "http://litellm.ai.svc:8000/v1"
+    )
+    api_key = _env("LLM_API_KEY", "sk-local") or "sk-local"
 
-    vision_model = _env("LLM_VISION_MODEL", "vision")
-    textgen_model = _env("LLM_TEXTGEN_MODEL", "textgen")
-    agent_model = _env("LLM_AGENT_MODEL", "agent")
+    vision_model = _env("LLM_VISION_MODEL", "vision") or "vision"
+    textgen_model = _env("LLM_TEXTGEN_MODEL", "textgen") or "textgen"
+    agent_model = _env("LLM_AGENT_MODEL", "agent") or "agent"
 
     default_temperature = _env_float("LLM_DEFAULT_TEMPERATURE", 0.7)
     default_max_tokens = _env_int("LLM_DEFAULT_MAX_TOKENS", 2048)
@@ -87,7 +89,7 @@ def _load_settings() -> LLMSettings:
         "LLM_CLOUD_FALLBACK_ENABLED", False
     )
     openai_api_key = _env("OPENAI_API_KEY", None) or _env("LLM_OPENAI_API_KEY", None)
-    openai_model = _env("LLM_OPENAI_MODEL", "gpt-4o-mini")
+    openai_model = _env("LLM_OPENAI_MODEL", "gpt-4o-mini") or "gpt-4o-mini"
 
     request_timeout = _env_int("LLM_REQUEST_TIMEOUT", 120)
 

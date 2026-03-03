@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Literal, TypedDict
+from typing import Any, Literal, TypedDict
 
 from langgraph.graph import END, StateGraph
 from pydantic import BaseModel, Field
@@ -20,7 +20,7 @@ class SpecDecodeState(TypedDict):
     approved: bool
 
 
-def create_spec_decode_graph(max_iterations: int = 2) -> StateGraph:
+def create_spec_decode_graph(max_iterations: int = 2) -> Any:
     draft_model = get_resilient_model(get_textgen_model(), name="draft_model")
     verify_model = get_resilient_model(get_agent_model(), name="verify_model")
 
