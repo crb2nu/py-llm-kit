@@ -3,6 +3,8 @@ include:
   - project: 'platform/gitops'
     file: '/ci/templates/python.yml'
 
+  - project: 'services/tech-radar'
+    file: '/ci/radar.yml'
 default:
   retry:
     max: 2
@@ -43,3 +45,6 @@ publish:
 
 publish:pypi:
   extends: .python-publish-pypi
+
+radar-scan:
+  extends: .radar-scan
